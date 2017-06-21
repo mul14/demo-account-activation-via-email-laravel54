@@ -18,3 +18,17 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('activation/{token}', function ($token)
+{
+    $user = App\User::where('activation_token', $token)->first();
+
+    if ($user) {
+        $user->activated_at = \Carbon\Carbon::now();
+        $user->save();
+
+        return 'Your account has been activated.';
+    }
+
+    return 'Invalid activation token.';
+});
