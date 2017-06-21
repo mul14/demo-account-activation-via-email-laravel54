@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Mail;
 use App\User;
+use App\Mail\UserActivation;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
@@ -68,5 +70,12 @@ class RegisterController extends Controller
             'password' => bcrypt($data['password']),
             'activation_token' => str_random(64),
         ]);
+    }
+
+    protected function registered($request, $user)
+    {
+        Mail::to($user)->send(new UserActivation($user));
+
+        return 'Please check your mail box.';
     }
 }
