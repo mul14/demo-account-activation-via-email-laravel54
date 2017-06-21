@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -16,9 +17,9 @@ class UserActivation extends Mailable
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**
@@ -28,6 +29,6 @@ class UserActivation extends Mailable
      */
     public function build()
     {
-        return $this->markdown('emails/activation');
+        return $this->markdown('emails/activation', $this->user->toArray());
     }
 }
